@@ -23,6 +23,10 @@ API REST construída com Spring Boot para gerenciamento de times e jogadores de 
 > ⚠️ Cada jogador deve estar associado a um time existente (`team.id`).
 
 ---
+<<<<<<< HEAD
+=======
+
+>>>>>>> 66bdba2075ce31efafe38bdf2423b7877bf4468f
 ```json
 ### Exemplo de JSON para criação de um **Time** (Team)
 {
@@ -35,10 +39,16 @@ API REST construída com Spring Boot para gerenciamento de times e jogadores de 
   "coachName": "Carlos Souza"
 }
 
+<<<<<<< HEAD
 ---
 ### Exemplo de JSON para criação de um **Jogador** (Player)
 
 ```json
+=======
+
+
+### Exemplo de JSON para criação de um **Jogador** (Player)
+>>>>>>> 66bdba2075ce31efafe38bdf2423b7877bf4468f
 {
   "name": "Felipe Mendes",
   "position": "Lateral",
