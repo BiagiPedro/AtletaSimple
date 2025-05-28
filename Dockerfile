@@ -7,8 +7,5 @@ WORKDIR /app
 # Copia o JAR gerado pelo Spring Boot para o container
 COPY target/*.jar app.jar
 
-# Expõe a porta padrão do Spring Boot
-EXPOSE 8080
-
 # Comando para rodar a aplicação
 ENTRYPOINT ["java", "-jar", "app.jar"]
