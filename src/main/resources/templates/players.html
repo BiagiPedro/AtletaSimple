@@ -1,45 +1,136 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Cadastro de Jogadores</title>
+    <title>Jogadores</title>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 950px;
+            margin: 40px auto;
+            background: rgba(255,255,255,0.97);
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 32px 40px 40px 40px;
+            text-align: center;
+            border: 4px solid #388e3c;
+        }
+        h1 {
+            color: #1976d2;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        h1 .fa-futbol {
+            color: #43a047;
+            font-size: 2rem;
+        }
+        form {
+            margin-bottom: 24px;
+        }
+        input[type="text"] {
+            padding: 10px 16px;
+            border: 1.5px solid #43a047;
+            border-radius: 6px;
+            width: 260px;
+            font-size: 1rem;
+            margin-right: 8px;
+        }
+        button {
+            padding: 10px 22px;
+            background: #1976d2;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #43a047;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            background: #fafbfc;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        th, td {
+            padding: 12px 8px;
+            text-align: center;
+        }
+        th {
+            background: #1976d2;
+            color: #fff;
+            font-weight: 600;
+        }
+        tr:nth-child(even) {
+            background: #e8f5e9;
+        }
+        tr:hover {
+            background: #c8e6c9;
+        }
+        a {
+            display: inline-block;
+            margin-top: 24px;
+            color: #1976d2;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        a:hover {
+            color: #43a047;
+        }
+        .fa-futbol {
+            color: #43a047;
+        }
+    </style>
 </head>
 <body>
-<h1>Cadastro de Jogador</h1>
-
-<form th:action="@{/players}" th:object="${player}" method="post">
-    <input type="hidden" th:field="*{id}" />
-
-    <label>Nome:</label>
-    <input type="text" th:field="*{name}" placeholder="Nome" required /><br/>
-
-    <label>Posição:</label>
-    <input type="text" th:field="*{position}" placeholder="Ex: Atacante" required /><br/>
-
-    <label>Idade:</label>
-    <input type="number" th:field="*{age}" placeholder="Idade" required /><br/>
-
-    <label>Gols:</label>
-    <input type="number" th:field="*{goals}" placeholder="Gols marcados" required /><br/>
-
-    <label>Partidas jogadas:</label>
-    <input type="number" th:field="*{matchesPlayed}" placeholder="Partidas" required /><br/>
-
-    <label>Assistências:</label>
-    <input type="number" th:field="*{assists}" placeholder="Assistências" required /><br/>
-
-    <label>Valor de mercado:</label>
-    <input type="number" step="0.01" th:field="*{marketValue}" placeholder="Milhões $" required /><br/>
-
-    <label>Time:</label>
-    <select th:field="*{team}" required>
-        <option th:each="t : ${teams}" th:value="${t}" th:text="${t.name}"></option>
-    </select><br/><br/>
-
-    <button type="submit">Salvar</button>
-</form>
-
-<br/>
-<a href="/">Voltar</a>
+<div class="container">
+    <h1><i class="fa-solid fa-futbol"></i> Jogadores</h1>
+    <form th:action="@{/players}" method="get">
+        <input type="text" name="search" th:value="${search}" placeholder="Pesquisar jogador pelo nome..." />
+        <button type="submit"><i class="fa-solid fa-magnifying-glass"></i> Pesquisar</button>
+    </form>
+    <table border="1" th:if="${players != null}">
+        <thead>
+            <tr>
+                <th><i class="fa-solid fa-user"></i> Nome</th>
+                <th>Posição</th>
+                <th>Idade</th>
+                <th><i class="fa-solid fa-futbol"></i> Gols</th>
+                <th>Partidas</th>
+                <th>Assistências</th>
+                <th>Valor de Mercado</th>
+                <th>Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="player : ${players}">
+                <td th:text="${player.name}"></td>
+                <td th:text="${player.position}"></td>
+                <td th:text="${player.age}"></td>
+                <td th:text="${player.goals}"></td>
+                <td th:text="${player.matchesPlayed}"></td>
+                <td th:text="${player.assists}"></td>
+                <td th:text="${player.marketValue} + ' mi' "></td>
+                <td th:text="${player.team.name}"></td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="/">Voltar</a>
+</div>
 </body>
 </html>

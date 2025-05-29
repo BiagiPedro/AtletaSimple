@@ -3,10 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <title>Times</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 950px;
+            margin: 40px auto;
+            background: rgba(255,255,255,0.97);
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 32px 40px 40px 40px;
+            text-align: center;
+            border: 4px solid #388e3c;
+        }
+        h1 {
+            color: #1976d2;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        h1 .fa-futbol {
+            color: #43a047;
+            font-size: 2rem;
+        }
+        form {
+            margin-bottom: 24px;
+        }
+        input[type="text"] {
+            padding: 10px 16px;
+            border: 1.5px solid #43a047;
+            border-radius: 6px;
+            width: 260px;
+            font-size: 1rem;
+            margin-right: 8px;
+        }
+        button {
+            padding: 10px 22px;
+            background: #1976d2;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #43a047;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            background: #fafbfc;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        th, td {
+            padding: 12px 8px;
+            text-align: center;
+        }
+        th {
+            background: #1976d2;
+            color: #fff;
+            font-weight: 600;
+        }
+        tr:nth-child(even) {
+            background: #e8f5e9;
+        }
+        tr:hover {
+            background: #c8e6c9;
+        }
+        a {
+            display: inline-block;
+            margin-top: 24px;
+            color: #1976d2;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        a:hover {
+            color: #43a047;
+        }
+        .fa-futbol {
+            color: #43a047;
+        }
+    </style>
 </head>
 <body>
-<h1>Times</h1>
-<p>Aqui você poderá visualizar, adicionar e remover times.</p>
-<a href="/">Voltar</a>
+<div class="container">
+    <h1><i class="fa-solid fa-futbol"></i> Times</h1>
+    <form th:action="@{/teams}" method="get">
+        <input type="text" name="search" th:value="${search}" placeholder="Pesquisar time pelo nome..." />
+        <button type="submit"><i class="fa-solid fa-magnifying-glass"></i> Pesquisar</button>
+    </form>
+    <table border="1" th:if="${teams != null}">
+        <thead>
+            <tr>
+                <th><i class="fa-solid fa-people-group"></i> Nome</th>
+                <th>Cidade</th>
+                <th>Data de Fundação</th>
+                <th>Estádio</th>
+                <th>Títulos</th>
+                <th>Orçamento (mi)</th>
+                <th>Técnico</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="team : ${teams}">
+                <td th:text="${team.name}"></td>
+                <td th:text="${team.city}"></td>
+                <td th:text="${team.foundationDate}"></td>
+                <td th:text="${team.stadiumName}"></td>
+                <td th:text="${team.championshipsWon}"></td>
+                <td th:text="${team.budget}"></td>
+                <td th:text="${team.coachName}"></td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="/">Voltar</a>
+</div>
 </body>
 </html>

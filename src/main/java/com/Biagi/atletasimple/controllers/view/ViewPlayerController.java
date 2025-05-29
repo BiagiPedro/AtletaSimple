@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/players")
 public class ViewPlayerController {
@@ -19,12 +21,20 @@ public class ViewPlayerController {
         this.teamService = teamService;
     }
 
-    // Página inicial de cadastro
+    // Página de listagem e pesquisa de jogadores
     @GetMapping
-    public String showForm(Model model) {
-        model.addAttribute("player", new Player());
-        model.addAttribute("teams", teamService.getAllTeams());
-        return "players"; // players.html
+    public String listPlayers(@RequestParam(value = "search", required = false) String search, Model model) {
+        List<Player> players;
+        if (search != null && !search.isEmpty()) {
+            players = playerService.getAllPlayers().stream()
+                    .filter(p -> p.getName().toLowerCase().contains(search.toLowerCase()))
+                    .toList();
+        } else {
+            players = playerService.getAllPlayers();
+        }
+        model.addAttribute("players", players);
+        model.addAttribute("search", search);
+        return "players";
     }
 
     // Salvando ou atualizando jogador
