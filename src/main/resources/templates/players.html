@@ -104,6 +104,11 @@
         <input type="text" name="search" th:value="${search}" placeholder="Pesquisar jogador pelo nome..." />
         <button type="submit"><i class="fa-solid fa-magnifying-glass"></i> Pesquisar</button>
     </form>
+    <div style="text-align: right; margin-bottom: 18px;">
+        <a href="/players/new" style="background: #43a047; color: #fff; padding: 10px 22px; border-radius: 6px; text-decoration: none; font-weight: 600; transition: background 0.2s;">
+            <i class="fa-solid fa-plus"></i> Novo Jogador
+        </a>
+    </div>
     <table border="1" th:if="${players != null}">
         <thead>
             <tr>
@@ -115,6 +120,7 @@
                 <th>Assistências</th>
                 <th>Valor de Mercado</th>
                 <th>Time</th>
+                <th>Ações</th>
             </tr>
         </thead>
         <tbody>
@@ -127,6 +133,11 @@
                 <td th:text="${player.assists}"></td>
                 <td th:text="${player.marketValue} + ' mi' "></td>
                 <td th:text="${player.team.name}"></td>
+                <td>
+                    <a th:href="@{'/players/delete/' + ${player.id}}" style="color: #d32f2f; font-weight: bold; text-decoration: none;" title="Remover" onclick="return confirm('Tem certeza que deseja remover este jogador?');">
+                        <i class="fa-solid fa-trash"></i>
+                    </a>
+                </td>
             </tr>
         </tbody>
     </table>

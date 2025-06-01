@@ -104,6 +104,11 @@
         <input type="text" name="search" th:value="${search}" placeholder="Pesquisar time pelo nome..." />
         <button type="submit"><i class="fa-solid fa-magnifying-glass"></i> Pesquisar</button>
     </form>
+    <div style="text-align: right; margin-bottom: 18px;">
+        <a href="/teams/new" style="background: #43a047; color: #fff; padding: 10px 22px; border-radius: 6px; text-decoration: none; font-weight: 600; transition: background 0.2s;">
+            <i class="fa-solid fa-plus"></i> Novo Time
+        </a>
+    </div>
     <table border="1" th:if="${teams != null}">
         <thead>
             <tr>
@@ -114,6 +119,7 @@
                 <th>Títulos</th>
                 <th>Orçamento (mi)</th>
                 <th>Técnico</th>
+                <th>Ações</th>
             </tr>
         </thead>
         <tbody>
@@ -125,6 +131,11 @@
                 <td th:text="${team.championshipsWon}"></td>
                 <td th:text="${team.budget}"></td>
                 <td th:text="${team.coachName}"></td>
+                <td>
+                    <a th:href="@{'/teams/delete/' + ${team.id}}" style="color: #d32f2f; font-weight: bold; text-decoration: none;" title="Remover" onclick="return confirm('Tem certeza que deseja remover este time?');">
+                        <i class="fa-solid fa-trash"></i>
+                    </a>
+                </td>
             </tr>
         </tbody>
     </table>

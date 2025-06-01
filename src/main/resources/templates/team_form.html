@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Novo Time</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 500px;
+            margin: 40px auto;
+            background: rgba(255,255,255,0.97);
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 32px 40px 40px 40px;
+            text-align: center;
+            border: 4px solid #388e3c;
+        }
+        h1 {
+            color: #1976d2;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        h1 .fa-people-group {
+            color: #43a047;
+            font-size: 2rem;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            align-items: stretch;
+        }
+        label {
+            text-align: left;
+            color: #1976d2;
+            font-weight: 500;
+        }
+        input {
+            padding: 8px 12px;
+            border: 1.5px solid #43a047;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+        button {
+            padding: 12px 0;
+            background: #1976d2;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 18px;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #43a047;
+        }
+        a {
+            display: inline-block;
+            margin-top: 18px;
+            color: #1976d2;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        a:hover {
+            color: #43a047;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1><i class="fa-solid fa-people-group"></i> Novo Time</h1>
+    <form th:action="@{/teams}" th:object="${team}" method="post">
+        <label>Nome:</label>
+        <input type="text" th:field="*{name}" placeholder="Nome do time" required />
+
+        <label>Cidade:</label>
+        <input type="text" th:field="*{city}" placeholder="Cidade" required />
+
+        <label>Data de Fundação:</label>
+        <input type="date" th:field="*{foundationDate}" required />
+
+        <label>Estádio:</label>
+        <input type="text" th:field="*{stadiumName}" placeholder="Nome do estádio" required />
+
+        <label>Títulos:</label>
+        <input type="number" th:field="*{championshipsWon}" placeholder="Quantidade de títulos" required />
+
+        <label>Orçamento (milhões):</label>
+        <input type="number" step="0.01" th:field="*{budget}" placeholder="Orçamento" required />
+
+        <label>Técnico:</label>
+        <input type="text" th:field="*{coachName}" placeholder="Nome do técnico" required />
+
+        <button type="submit"><i class="fa-solid fa-plus"></i> Adicionar Time</button>
+    </form>
+    <a href="/teams">Voltar para lista</a>
+</div>
+</body>
+</html> 

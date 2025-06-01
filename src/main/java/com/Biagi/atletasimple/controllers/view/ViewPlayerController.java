@@ -37,11 +37,23 @@ public class ViewPlayerController {
         return "players";
     }
 
+    // Exibe o formulário para adicionar novo jogador
+    @GetMapping("/new")
+    public String showAddForm(Model model) {
+        model.addAttribute("player", new Player());
+        model.addAttribute("teams", teamService.getAllTeams());
+        return "player_form";
+    }
+
     // Salvando ou atualizando jogador
     @PostMapping
     public String savePlayer(@ModelAttribute Player player) {
+        // Corrige o binding do time
+        if (player.getTeam() != null && player.getTeam().getId() != null) {
+            player.setTeam(teamService.getTeamById(player.getTeam().getId()).orElse(null));
+        }
         playerService.savePlayer(player);
-        return "redirect:/view/players"; // Redireciona para o formulário novamente
+        return "redirect:/players";
     }
 
     // Carrega o formulário com dados de um jogador existente para edição
@@ -58,6 +70,6 @@ public class ViewPlayerController {
     @GetMapping("/delete/{id}")
     public String deletePlayer(@PathVariable Long id) {
         playerService.deletePlayer(id);
-        return "redirect:/view/players";
+        return "redirect:/players";
     }
 }

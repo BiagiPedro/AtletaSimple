@@ -33,4 +33,25 @@ public class ViewTeamController {
         model.addAttribute("search", search);
         return "teams";
     }
+
+    // Exibe o formulário para adicionar novo time
+    @GetMapping("/new")
+    public String showAddForm(Model model) {
+        model.addAttribute("team", new Team());
+        return "team_form";
+    }
+
+    // Salvando time
+    @PostMapping
+    public String saveTeam(@ModelAttribute Team team) {
+        teamService.saveTeam(team);
+        return "redirect:/teams";
+    }
+
+    // Excluir time
+    @GetMapping("/delete/{id}")
+    public String deleteTeam(@PathVariable Long id) {
+        teamService.deleteTeam(id);
+        return "redirect:/teams";
+    }
 } 
