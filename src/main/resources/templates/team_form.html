@@ -95,10 +95,10 @@
         <input type="text" th:field="*{stadiumName}" placeholder="Nome do estádio" required />
 
         <label>Títulos:</label>
-        <input type="number" th:field="*{championshipsWon}" placeholder="Quantidade de títulos" required />
+        <input type="number" th:field="*{championshipsWon}" placeholder="Quantidade de títulos" required min="0" />
 
         <label>Orçamento (milhões):</label>
-        <input type="number" step="0.01" th:field="*{budget}" placeholder="Orçamento" required />
+        <input type="number" step="0.01" th:field="*{budget}" placeholder="Orçamento" required min="0" />
 
         <label>Técnico:</label>
         <input type="text" th:field="*{coachName}" placeholder="Nome do técnico" required />

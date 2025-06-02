@@ -2,6 +2,7 @@ package com.Biagi.atletasimple.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -27,9 +28,11 @@ public class Team{
     @Column(name = "stadium_name", nullable = false, length = 100)
     private String stadiumName;
 
+    @Min(0)
     @Column(name = "championships_won", nullable = false)
     private int championshipsWon;
 
+    @Min(0)
     @Column(name = "budget", nullable = false)
     private float budget; // Em milhões
 

@@ -89,19 +89,19 @@
         <input type="text" th:field="*{position}" placeholder="Ex: Atacante" required />
 
         <label>Idade:</label>
-        <input type="number" th:field="*{age}" placeholder="Idade" required />
+        <input type="number" th:field="*{age}" placeholder="Idade" required min="0" />
 
         <label>Gols:</label>
-        <input type="number" th:field="*{goals}" placeholder="Gols marcados" required />
+        <input type="number" th:field="*{goals}" placeholder="Gols marcados" required min="0" />
 
         <label>Partidas jogadas:</label>
-        <input type="number" th:field="*{matchesPlayed}" placeholder="Partidas" required />
+        <input type="number" th:field="*{matchesPlayed}" placeholder="Partidas" required min="0" />
 
         <label>Assistências:</label>
-        <input type="number" th:field="*{assists}" placeholder="Assistências" required />
+        <input type="number" th:field="*{assists}" placeholder="Assistências" required min="0" />
 
         <label>Valor de mercado (milhões):</label>
-        <input type="number" step="0.01" th:field="*{marketValue}" placeholder="Milhões $" required />
+        <input type="number" step="0.01" th:field="*{marketValue}" placeholder="Milhões $" required min="0" />
 
         <label>Time:</label>
         <select th:field="*{team.id}" required>

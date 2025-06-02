@@ -1,6 +1,7 @@
 package com.Biagi.atletasimple.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 
 @Entity
 @Table(name = "table_player")
@@ -16,18 +17,23 @@ public class Player{
     @Column(name = "position", nullable = false, length = 50)
     private String position;
 
+    @Min(0)
     @Column(name = "age", nullable = false)
     private int age;
 
+    @Min(0)
     @Column(name = "goals", nullable = false)
     private int goals;
 
+    @Min(0)
     @Column(name = "matches_played", nullable = false)
     private int matchesPlayed;
 
+    @Min(0)
     @Column(name = "assists", nullable = false)
     private int assists;
 
+    @Min(0)
     @Column(name = "market_value", nullable = false)
     private float marketValue;
 

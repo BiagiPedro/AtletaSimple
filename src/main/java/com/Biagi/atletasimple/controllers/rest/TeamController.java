@@ -1,4 +1,4 @@
-package com.Biagi.atletasimple.controllers;
+package com.Biagi.atletasimple.controllers.rest;
 
 import com.Biagi.atletasimple.models.Team;
 import com.Biagi.atletasimple.services.TeamService;
