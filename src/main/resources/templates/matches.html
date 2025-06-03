@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Partidas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1050px;
+            margin: 40px auto;
+            background: rgba(255,255,255,0.97);
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 32px 40px 40px 40px;
+            text-align: center;
+            border: 4px solid #388e3c;
+        }
+        h1 {
+            color: #1976d2;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        h1 .fa-trophy {
+            color: #43a047;
+            font-size: 2rem;
+        }
+        button {
+            padding: 10px 22px;
+            background: #1976d2;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-bottom: 18px;
+        }
+        button:hover {
+            background: #43a047;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            background: #fafbfc;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        th, td {
+            padding: 12px 8px;
+            text-align: center;
+        }
+        th {
+            background: #1976d2;
+            color: #fff;
+            font-weight: 600;
+        }
+        tr:nth-child(even) {
+            background: #e8f5e9;
+        }
+        tr:hover {
+            background: #c8e6c9;
+        }
+        a {
+            display: inline-block;
+            margin-top: 24px;
+            color: #1976d2;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        a:hover {
+            color: #43a047;
+        }
+        .sim-result {
+            margin: 18px auto 0 auto;
+            padding: 16px 0;
+            background: #e8f5e9;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            color: #1976d2;
+            max-width: 400px;
+        }
+        .sim-form {
+            margin-bottom: 24px;
+        }
+        select {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1.5px solid #43a047;
+            font-size: 1rem;
+            margin: 0 8px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1><i class="fa-solid fa-trophy"></i> Partidas</h1>
+    <form class="sim-form" onsubmit="return simularPartidaPorTimes(event)">
+        <label for="homeTeam">Time Casa:</label>
+        <select id="homeTeam" name="homeTeam" required>
+            <option th:each="team : ${teams}" th:value="${team.id}" th:text="${team.name}"></option>
+        </select>
+        <label for="awayTeam">Time Visitante:</label>
+        <select id="awayTeam" name="awayTeam" required>
+            <option th:each="team : ${teams}" th:value="${team.id}" th:text="${team.name}"></option>
+        </select>
+        <button type="submit"><i class="fa-solid fa-play"></i> Simular Partida</button>
+    </form>
+    <div id="simResult" class="sim-result" style="display:none;"></div>
+    <table border="1" th:if="${matches != null}">
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Time Casa</th>
+                <th>Placar</th>
+                <th>Time Visitante</th>
+                <th>Estádio</th>
+                <th>Competição</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="match : ${matches}">
+                <td th:text="${#temporals.format(match.matchDate, 'dd/MM/yyyy HH:mm')}"></td>
+                <td th:text="${match.homeTeam.name}"></td>
+                <td><span th:text="${match.homeScore}"></span> x <span th:text="${match.awayScore}"></span></td>
+                <td th:text="${match.awayTeam.name}"></td>
+                <td th:text="${match.stadium}"></td>
+                <td th:text="${match.competition}"></td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="/">Voltar</a>
+</div>
+<script>
+    function simularPartidaPorTimes(event) {
+        event.preventDefault();
+        const homeTeam = document.getElementById('homeTeam').value;
+        const awayTeam = document.getElementById('awayTeam').value;
+        if (homeTeam === awayTeam) {
+            alert('Escolha times diferentes!');
+            return false;
+        }
+        fetch('/api/matches/simulate-by-teams', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ homeTeamId: homeTeam, awayTeamId: awayTeam })
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Erro ao simular partida');
+            return response.json();
+        })
+        .then(data => {
+            document.getElementById('simResult').style.display = 'block';
+            document.getElementById('simResult').innerText =
+                `${data.homeTeam.name} ${data.homeScore} x ${data.awayScore} ${data.awayTeam.name}`;
+            setTimeout(() => window.location.reload(), 2000);
+        })
+        .catch(err => alert(err.message));
+        return false;
+    }
+</script>
+</body>
+</html> 
