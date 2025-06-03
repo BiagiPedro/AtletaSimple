@@ -28,5 +28,10 @@ public class ViewController {
         model.addAttribute("teams", teamService.getAllTeams());
         return "matches";
     }
+
+    @GetMapping("/player-stats")
+    public String playerStats() {
+        return "player_stats";
+    }
 }
 

@@ -2,6 +2,8 @@ package com.Biagi.atletasimple.services;
 
 import com.Biagi.atletasimple.models.Team;
 import com.Biagi.atletasimple.repositories.TeamRepository;
+import com.Biagi.atletasimple.repositories.PlayerRepository;
+import com.Biagi.atletasimple.repositories.MatchRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,9 +13,13 @@ import java.util.Optional;
 public class TeamService {
 
     private final TeamRepository teamRepository;
+    private final PlayerRepository playerRepository;
+    private final MatchRepository matchRepository;
 
-    public TeamService(TeamRepository teamRepository) {
+    public TeamService(TeamRepository teamRepository, PlayerRepository playerRepository, MatchRepository matchRepository) {
         this.teamRepository = teamRepository;
+        this.playerRepository = playerRepository;
+        this.matchRepository = matchRepository;
     }
 
     public Team saveTeam(Team team) {
@@ -39,6 +45,10 @@ public class TeamService {
     }
 
     public void deleteTeam(Long id) {
+        Team team = teamRepository.findById(id).orElseThrow(() -> new RuntimeException("Time não encontrado"));
+        // Deletar todas as partidas onde o time é home ou away
+        matchRepository.findByHomeTeam(team).forEach(match -> matchRepository.deleteById(match.getId()));
+        matchRepository.findByAwayTeam(team).forEach(match -> matchRepository.deleteById(match.getId()));
         teamRepository.deleteById(id);
     }
 }

@@ -2,6 +2,8 @@ package com.Biagi.atletasimple.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
+import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 @Table(name = "table_player")
@@ -40,6 +42,9 @@ public class Player{
     @ManyToOne
     @JoinColumn(name = "team_id", nullable = false)
     private Team team;
+
+    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PlayerMatchStatistic> statistics = new ArrayList<>();
 
     // Getters e Setters
 
@@ -114,5 +119,13 @@ public class Player{
 
     public void setTeam(Team team) {
         this.team = team;
+    }
+
+    public List<PlayerMatchStatistic> getStatistics() {
+        return statistics;
+    }
+
+    public void setStatistics(List<PlayerMatchStatistic> statistics) {
+        this.statistics = statistics;
     }
 }
