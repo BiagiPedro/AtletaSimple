@@ -6,11 +6,10 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/atletasimple?createDatabaseIfNotExist=true
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: 1234
+      - SPRING_PROFILES_ACTIVE=docker    
     networks:
       - minha-rede
 
@@ -18,8 +17,15 @@ services:
     image: mysql:8
     restart: always
     environment:
+      MYSQL_ROOT_PASSWORD: toor
       MYSQL_DATABASE: atletasimple
-      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-ptoor", "--silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     ports:
       - "3307:3306"
     networks:
@@ -27,3 +33,4 @@ services:
 
 networks:
   minha-rede:
+    driver: bridge
