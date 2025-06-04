@@ -73,7 +73,15 @@
 <body>
 <div class="container">
     <h1><i class="fa-solid fa-chart-simple"></i> Estatísticas dos Jogadores</h1>
-    <canvas id="goalsChart" width="900" height="320" style="margin-bottom: 32px;"></canvas>
+    <canvas id="goalsChart" width="900" height="320" style="display: block; margin: 0 auto 32px auto;"></canvas>
+    <!-- Modal para gráfico de linhas -->
+    <div id="modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.5); align-items:center; justify-content:center; z-index:1000;">
+      <div style="background:#fff; border-radius:10px; padding:32px; min-width:600px; min-height:400px; position:relative;">
+        <button onclick="closeModal()" style="position:absolute; top:10px; right:16px; background:none; border:none; font-size:1.5rem; cursor:pointer; color:#1976d2;">&times;</button>
+        <h2 id="modalTitle" style="color:#1976d2; margin-bottom:18px;"></h2>
+        <canvas id="lineChart" width="540" height="320"></canvas>
+      </div>
+    </div>
     <table id="statsTable">
         <thead>
             <tr>
@@ -98,9 +106,13 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+    let barChartInstance = null;
+    let lineChartInstance = null;
+    let playerData = [];
     fetch('/api/player-stats/summary')
         .then(response => response.json())
         .then(data => {
+            playerData = data;
             const tbody = document.querySelector('#statsTable tbody');
             tbody.innerHTML = '';
             data.forEach(stat => {
@@ -125,7 +137,7 @@
             const ctx = document.getElementById('goalsChart').getContext('2d');
             const labels = data.map(stat => stat.playerName);
             const goals = data.map(stat => stat.totalGoals);
-            new Chart(ctx, {
+            barChartInstance = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: labels,
@@ -156,10 +168,73 @@
                             beginAtZero: true,
                             ticks: { color: '#1976d2', font: { size: 14 } }
                         }
+                    },
+                    onClick: (evt, elements) => {
+                        if (elements.length > 0) {
+                            const idx = elements[0].index;
+                            const player = data[idx];
+                            showPlayerLineChart(player);
+                        }
                     }
                 }
             });
         });
+
+    function showPlayerLineChart(player) {
+        // Buscar estatísticas detalhadas por partida desse jogador
+        fetch(`/api/player-match-statistics/player/${player.playerId}`)
+            .then(response => response.json())
+            .then(stats => {
+                document.getElementById('modal').style.display = 'flex';
+                document.getElementById('modalTitle').innerText = `Desempenho de ${player.playerName} por Partida`;
+                const matchLabels = stats.map(s => s.match.matchDate ? (s.match.matchDate.split('T')[0]) : 'Partida');
+                const goals = stats.map(s => s.goalsScored);
+                const assists = stats.map(s => s.assists);
+                const yellow = stats.map(s => s.yellowCards);
+                const red = stats.map(s => s.redCards);
+                const passes = stats.map(s => s.passesCompleted);
+                const fouls = stats.map(s => s.foulsCommitted);
+                const datasets = [
+                  { label: 'Gols', data: goals, borderColor: '#43a047', backgroundColor: '#43a047', fill: false },
+                  { label: 'Assistências', data: assists, borderColor: '#1976d2', backgroundColor: '#1976d2', fill: false },
+                  { label: 'Amarelos', data: yellow, borderColor: '#ffd600', backgroundColor: '#ffd600', fill: false },
+                  { label: 'Vermelhos', data: red, borderColor: '#d32f2f', backgroundColor: '#d32f2f', fill: false },
+                  { label: 'Passes Certos', data: passes, borderColor: '#6d4c41', backgroundColor: '#6d4c41', fill: false },
+                  { label: 'Faltas Cometidas', data: fouls, borderColor: '#ff9800', backgroundColor: '#ff9800', fill: false }
+                ];
+                if (lineChartInstance) lineChartInstance.destroy();
+                const ctx = document.getElementById('lineChart').getContext('2d');
+                lineChartInstance = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: matchLabels,
+                        datasets: datasets
+                    },
+                    options: {
+                        responsive: false,
+                        plugins: {
+                            legend: { display: true },
+                            title: {
+                                display: true,
+                                text: 'Estatísticas por Partida',
+                                color: '#1976d2',
+                                font: { size: 18 }
+                            }
+                        },
+                        scales: {
+                            x: { ticks: { color: '#1976d2' } },
+                            y: { beginAtZero: true, ticks: { color: '#1976d2' } }
+                        }
+                    }
+                });
+            });
+    }
+    function closeModal() {
+        document.getElementById('modal').style.display = 'none';
+        if (lineChartInstance) lineChartInstance.destroy();
+    }
 </script>
+
+
 </body>
 </html> 

@@ -3,6 +3,7 @@ package com.Biagi.atletasimple.controllers.rest;
 import com.Biagi.atletasimple.services.PlayerMatchStatisticService;
 import com.Biagi.atletasimple.services.PlayerStatsSummaryDTO;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
@@ -20,4 +21,10 @@ public class PlayerStatsController {
     public List<PlayerStatsSummaryDTO> getPlayerStatsSummary() {
         return playerMatchStatisticService.getPlayerStatsSummary();
     }
+
+    @GetMapping("/summary/{id}")
+    public PlayerStatsSummaryDTO getPlayerStatsById(@PathVariable Long id) {
+        return playerMatchStatisticService.getPlayerStatsById(id);
+    }
+
 } 

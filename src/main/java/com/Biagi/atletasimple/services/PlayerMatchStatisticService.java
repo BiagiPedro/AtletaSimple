@@ -81,4 +81,32 @@ public class PlayerMatchStatisticService {
         }
         return summaryList;
     }
+
+    public PlayerStatsSummaryDTO getPlayerStatsById(Long playerId) {
+        // Busca o jogador pelo ID
+        Player player = playerRepository.findById(playerId)
+                .orElseThrow(() -> new RuntimeException("Jogador não encontrado com o ID: " + playerId));
+
+        // Busca as estatísticas do jogador
+        List<PlayerMatchStatistic> stats = playerMatchStatisticRepository.findByPlayer(player);
+
+        // Cria e popula o DTO
+        PlayerStatsSummaryDTO dto = new PlayerStatsSummaryDTO();
+        dto.setPlayerId(player.getId());
+        dto.setPlayerName(player.getName());
+        dto.setTeamName(player.getTeam() != null ? player.getTeam().getName() : "");
+        dto.setTotalGoals(player.getGoals() + stats.stream().mapToInt(PlayerMatchStatistic::getGoalsScored).sum());
+        dto.setTotalAssists(player.getAssists() + stats.stream().mapToInt(PlayerMatchStatistic::getAssists).sum());
+        dto.setTotalYellowCards(stats.stream().mapToInt(PlayerMatchStatistic::getYellowCards).sum());
+        dto.setTotalRedCards(stats.stream().mapToInt(PlayerMatchStatistic::getRedCards).sum());
+        dto.setTotalShotsOnTarget(stats.stream().mapToInt(PlayerMatchStatistic::getShotsOnTarget).sum());
+        dto.setTotalShotsOffTarget(stats.stream().mapToInt(PlayerMatchStatistic::getShotsOffTarget).sum());
+        dto.setTotalPassesCompleted(stats.stream().mapToInt(PlayerMatchStatistic::getPassesCompleted).sum());
+        dto.setTotalPassesAttempted(stats.stream().mapToInt(PlayerMatchStatistic::getPassesAttempted).sum());
+        dto.setTotalFoulsCommitted(stats.stream().mapToInt(PlayerMatchStatistic::getFoulsCommitted).sum());
+        dto.setTotalFoulsSuffered(stats.stream().mapToInt(PlayerMatchStatistic::getFoulsSuffered).sum());
+
+        return dto;
+    }
+
 } 
