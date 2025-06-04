@@ -169,70 +169,12 @@
                             ticks: { color: '#1976d2', font: { size: 14 } }
                         }
                     },
-                    onClick: (evt, elements) => {
-                        if (elements.length > 0) {
-                            const idx = elements[0].index;
-                            const player = data[idx];
-                            showPlayerLineChart(player);
-                        }
-                    }
+
                 }
             });
         });
 
-    function showPlayerLineChart(player) {
-        // Buscar estatísticas detalhadas por partida desse jogador
-        fetch(`/api/player-match-statistics/player/${player.playerId}`)
-            .then(response => response.json())
-            .then(stats => {
-                document.getElementById('modal').style.display = 'flex';
-                document.getElementById('modalTitle').innerText = `Desempenho de ${player.playerName} por Partida`;
-                const matchLabels = stats.map(s => s.match.matchDate ? (s.match.matchDate.split('T')[0]) : 'Partida');
-                const goals = stats.map(s => s.goalsScored);
-                const assists = stats.map(s => s.assists);
-                const yellow = stats.map(s => s.yellowCards);
-                const red = stats.map(s => s.redCards);
-                const passes = stats.map(s => s.passesCompleted);
-                const fouls = stats.map(s => s.foulsCommitted);
-                const datasets = [
-                  { label: 'Gols', data: goals, borderColor: '#43a047', backgroundColor: '#43a047', fill: false },
-                  { label: 'Assistências', data: assists, borderColor: '#1976d2', backgroundColor: '#1976d2', fill: false },
-                  { label: 'Amarelos', data: yellow, borderColor: '#ffd600', backgroundColor: '#ffd600', fill: false },
-                  { label: 'Vermelhos', data: red, borderColor: '#d32f2f', backgroundColor: '#d32f2f', fill: false },
-                  { label: 'Passes Certos', data: passes, borderColor: '#6d4c41', backgroundColor: '#6d4c41', fill: false },
-                  { label: 'Faltas Cometidas', data: fouls, borderColor: '#ff9800', backgroundColor: '#ff9800', fill: false }
-                ];
-                if (lineChartInstance) lineChartInstance.destroy();
-                const ctx = document.getElementById('lineChart').getContext('2d');
-                lineChartInstance = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: matchLabels,
-                        datasets: datasets
-                    },
-                    options: {
-                        responsive: false,
-                        plugins: {
-                            legend: { display: true },
-                            title: {
-                                display: true,
-                                text: 'Estatísticas por Partida',
-                                color: '#1976d2',
-                                font: { size: 18 }
-                            }
-                        },
-                        scales: {
-                            x: { ticks: { color: '#1976d2' } },
-                            y: { beginAtZero: true, ticks: { color: '#1976d2' } }
-                        }
-                    }
-                });
-            });
-    }
-    function closeModal() {
-        document.getElementById('modal').style.display = 'none';
-        if (lineChartInstance) lineChartInstance.destroy();
-    }
+
 </script>
 
 
