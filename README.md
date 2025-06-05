@@ -26,9 +26,9 @@ O AtletaSimple é um CRUD completo para gestão de jogadores, times, partidas e 
    - O projeto já está pronto para rodar com MySQL (veja `application.properties`).
    - Por padrão, usuário: `root`, senha: `root`, banco: `atletasimple`.
    - Você pode rodar com Docker usando o `docker-compose.yml` incluso.
-3. **Build e execute:**
+3. **Rode o container:**
    ```bash
-   ./mvnw spring-boot:run
+   docker-compose up 
    ```
 4. **Acesse no navegador:**
    - Página inicial: [http://localhost:8080/](http://localhost:8080/)
